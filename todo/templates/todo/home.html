@@ -1,0 +1,19 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+
+<h1>New ToDo list!</h1>
+<br>
+<h2>{{ user.username }} has * lists</h2>
+
+{% for todo in todolist %}
+
+<h3>{{ todo.title }}</h3>
+<h5>{{ todo.memo }}</h5>
+<p>{{ todo.datecompleted }}</p>
+<p>{{ todo.important }}</p>
+
+
+{% endfor %}
+
+{% endblock %}
