@@ -1,24 +1,20 @@
 
-{% block content %}
-
 {% if user.is_authenticated %}
-
-<h2>Logged in as {{ user.username }}</h2>
-<br>
-
-<form action="{% url 'logoutuser' %}" method='POST'>
-{% csrf_token %}
-<button type="submit">Logout</button>
-</form>
-<br>
-
+	<h2>Logged in as <b><i>{{ user.username }}</i></b></h2>
+	<form action="{% url 'logoutuser' %}" method='POST'>
+	{% csrf_token %}
+	<button type="submit">Logout</button>
+	</form>
+	<br>
+		<a href="{% url 'cteatetodo' %}">Create new ToDo!</a>
+		<a href="{% url 'currenttodos' %}">Current ToDos</a>
+		<a href="{% url 'completedtodos' %}">Completed ToDos</a>
 {% else %}
-
-<a href="{% url 'signupuser' %}">Sign Up</a>
-<br>
-<a href="{% url 'loginuser' %}">Login</a>
+	<a href="{% url 'signupuser' %}">Sign Up</a>
+	<br>
+	<a href="{% url 'loginuser' %}">Login</a>
+	<br>
 
 {% endif %}
 <br>
-<br>
- {% endblock %}
+{% block content %}{% endblock %}
