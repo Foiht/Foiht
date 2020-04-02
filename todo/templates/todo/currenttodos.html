@@ -3,11 +3,9 @@
 
 {% block content %}
     <div class="row justify-content-center mt-5">
-        <div class="col-md-10">
+        <div class="col-md-10 text-secondary">
             {% if todos %}
-                 <h1>{{ todos.count }} Current Todo{{ todos.count|pluralize }}</h1>
-            {% else %}
-                           <h1>Current Todos</h1>
+                 <h1><big><em >{{ user.username }}</em></big> работает над {{ todos.count }} ToDo{{ todos.count|pluralize }}</h1>
             {% endif %}
         </div>
     </div>
@@ -16,14 +14,16 @@
         {% if todos %}
             <div class="list-group list-group-flush">
                 {% for todo in todos %}
-                    <a href="{% url 'viewtodo' todo.id %}" class="list-group-item list-group-item-warning"{% if todo.important %} class="list-group-itemlist-group-item-warning" {% else %} style="background-color: #e3f2fd;" {% endif %}><b>{{ todo.title }}</b>{% if todo.memo %} - {{ todo.memo|truncatechars:30 }}{% endif %}</a>
+                    <a href="{% url 'viewtodo' todo.id %}" class="list-group-item text-info"{% if todo.important %} style="background-color: #fde3f2" {% else %} style="background-color: #e3f2fd" {% endif %}><b>{{ todo.title }}</b>{% if todo.memo %} - {{ todo.memo|truncatechars:30 }}{% endif %}</a>
                 {% endfor %}
+                <br>
+                <a role="button" class="btn btn-outline-success btn-lg btm-block" href="{% url 'createtodo' %}">Добавить ToDo</a>
             </div>
         {% else %}
             <div class="text-center">
-                <h2>Looks like you don't have any todos! Nice work.</h2>
+                <h2>Нет дел! Хорошая работа.</h2>
             <br>
-            <a role="button" class="btn btn-primary" href="{% url 'createtodo' %}">New Todo</a>
+            <a role="button" class="btn btn-primary" href="{% url 'createtodo' %}">Новое ToDo</a>
             </div>
         {% endif %}
         </div>

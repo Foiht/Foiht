@@ -63,12 +63,6 @@ def currenttodos(request):
     return render(request, 'todo/currenttodos.html', {'todos':todos})
 
 @login_required
-def hello_user(request):
-    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
-    return render(request, 'todo/hello_user.html', {'todos':todos})
-
-
-@login_required
 def completedtodos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=False).order_by('-datecompleted')
     return render(request, 'todo/completedtodos.html', {'todos':todos})
@@ -99,5 +93,9 @@ def completetodo(request, todo_pk):
 def deletetodo(request, todo_pk):
     todo = get_object_or_404(Todo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
-        todo.delete()
-        return redirect('currenttodos')
+        if todo.datecompleted:
+            todo.delete()
+            return redirect('completedtodos')
+        else:
+            todo.delete()
+            return redirect('currenttodos')
