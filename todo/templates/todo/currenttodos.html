@@ -18,6 +18,8 @@
                 {% endfor %}
                 <br>
                 <a role="button" class="btn btn-outline-success btn-lg btm-block" href="{% url 'createtodo' %}">Добавить ToDo</a>
+                <br>
+                <a role="button" class="footer btn-secondery btn-lg" href="{% url 'email' %}">Отправить список дел на почту</a>
             </div>
         {% else %}
             <div class="text-center">
