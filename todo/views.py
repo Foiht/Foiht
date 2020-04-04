@@ -3,10 +3,11 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
-from .forms import TodoForm
-from .models import Todo
+from .forms import TodoForm, MailForm
+from .models import Todo, Mail
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
 
 def home(request):
     return render(request, 'todo/home.html')
@@ -61,6 +62,27 @@ def createtodo(request):
 def currenttodos(request):
     todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
     return render(request, 'todo/currenttodos.html', {'todos':todos})
+
+@login_required
+def email(request):
+    todos = Todo.objects.filter(user=request.user, datecompleted__isnull=True)
+    if request.method == 'GET':
+        return render(request, 'todo/email.html', {'form':MailForm(), 'todos':todos})
+    else:
+        try:
+            form = MailForm(request.POST)
+            newmail = form.save(commit=False)
+            newmail.user = request.user
+            todolist = []
+            for todo in todos:
+                todolist.append(todo.title)
+            alist = "\n".join(todolist)
+            email = EmailMessage(newmail.title, alist, to=[newmail.usermail])
+            email.send()
+            return redirect('currenttodos')
+        except ValueError:
+            return render(request, 'todo/email.html', {'form':MailForm(), 'todos':todos, 'error':'Bad data passed in. Try again.'})
+
 
 @login_required
 def completedtodos(request):
